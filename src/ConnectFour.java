@@ -1,3 +1,5 @@
+import java.util.InputMismatchException;
+
 /**
  * ConnectFour
  * Creates a Connect Four game that can be played by computer or human
@@ -15,6 +17,8 @@ public class ConnectFour {
      */
     public static Player makePlayer(Connect4View view, String player){
 
+        boolean valid = false;
+
         // request user to enter the name of the player
         String playerName = view.getAnswer("Enter the name of the " + player + " player." +
                 "\n(Include 'Computer' in the name of a computer player)");
@@ -22,8 +26,18 @@ public class ConnectFour {
         // if the player included the word computer in the name
         if (playerName.contains("Computer")){
 
-            // ask how deep the computer should look ahead for moves
-            int depth = view.getIntAnswer("How far should I look ahead");
+            int depth = 0;
+            while(!valid) {
+                try {
+
+                    // ask how deep the computer should look ahead for moves
+                    depth = view.getIntAnswer("How far should I look ahead");
+                    valid = true;
+                } catch (InputMismatchException ex) {
+                    view.reportToUser("Not a valid integer");
+                    valid = false;
+                }
+            }
 
             // create new computer player
             return new ComputerConnectFourPlayer(playerName, depth);
@@ -39,11 +53,13 @@ public class ConnectFour {
      */
     public static void main(String args[]){
 
+        ComputerConnectFourPlayer comp = new ComputerConnectFourPlayer("comp", 2);
+
         // create player array which holds two players
         Player[] players = new Player[2];
 
         // creates a view to display the game
-        Connect4View view = new Connect4ViewGraphical();
+        Connect4View view = new ConnectFourViewText();
 
         // assign position to each player
         players[0] = makePlayer(view, "First");

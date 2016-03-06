@@ -312,6 +312,15 @@ public class ComputerConnectFourPlayer extends Player{
                     // make move and call static evaluation on that move
                     copy.makeMove(j);
                     currentMove = new ConnectFourMove(staticEvaluation(copy,j), j);
+
+                    for (int i = copy.getBoard().length-1; i >= 0; i--) {
+                        System.out.println(copy.getBoard()[i]);
+                    }
+                    System.out.println();
+                    System.out.println("low: " + low);
+                    System.out.println("high: " + high);
+                    System.out.println("Static Evaluation for this position: " + currentMove.getValue());
+
                     if (state.getPlayerToMove() != player){
                       currentMove.setValue(-currentMove.getValue());
                       }
@@ -322,7 +331,7 @@ public class ComputerConnectFourPlayer extends Player{
                     if (copy.gameIsOver()){
 
                         // update current move
-                        currentMove = new ConnectFourMove(100*staticEvaluation(copy,j), j);
+                        currentMove = new ConnectFourMove(staticEvaluation(copy,j), j);
                     }
 
                     // if depth is greater than current move
