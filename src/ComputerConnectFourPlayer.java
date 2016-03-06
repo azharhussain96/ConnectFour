@@ -298,7 +298,7 @@ public class ComputerConnectFourPlayer extends Player{
         // get player who's turn it is to play
         int playerToMove = state.getPlayerNum();
             // for each column, test the point value of placing a chip there
-            for (int j = 0; j < 6; j++) {
+            for (int j = 0; j <= 6; j++) {
 
                 // make a new dummy Connect Four game
                 ConnectFourGame copy = new ConnectFourGame(playerToMove, state.getPlayers(), view);
@@ -317,9 +317,6 @@ public class ComputerConnectFourPlayer extends Player{
                       }
                       currentMove.setMove(j);
                       GTSValue += currentMove.getValue();
-                    
-                    // if the value is bigger than the lowest
-                    
 
                     // if the game is over
                     if (copy.gameIsOver()){
@@ -334,8 +331,6 @@ public class ComputerConnectFourPlayer extends Player{
                         // switch players and recursively call pickMove with values switched for opponent player
                         copy.switchPlayer();
                         currentMove = pickMove(copy, depth - 1, -high, -low, view, GTSValue);
-                        
-                        
 
                     } else {
                         currentMove = new ConnectFourMove(GTSValue, j);

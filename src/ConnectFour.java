@@ -43,7 +43,7 @@ public class ConnectFour {
         Player[] players = new Player[2];
 
         // creates a view to display the game
-        Connect4View view = new ConnectFourViewText();
+        Connect4View view = new Connect4ViewGraphical();
 
         // assign position to each player
         players[0] = makePlayer(view, "First");

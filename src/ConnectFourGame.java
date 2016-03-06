@@ -84,7 +84,7 @@ public class ConnectFourGame implements Connect4State {
      * @return a boolean to determine whether the move is valid
      */
     public boolean isValidMove(int col){
-        if (col > 5 || col < 0){
+        if (col > 6 || col < 0){
             return false;
         }
 
@@ -98,7 +98,7 @@ public class ConnectFourGame implements Connect4State {
     
     /**
      * Places a piece on the board in the desired column
-     * @param the column that you wish to place the piece in
+     * @param col the column that you wish to place the piece in
      */
     public void makeMove(int col){
     		//Go through all the rows for the given column
