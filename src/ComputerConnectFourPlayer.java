@@ -40,7 +40,7 @@ public class ComputerConnectFourPlayer extends Player{
     public int getMove(Connect4State state, Connect4View view){
 
         // calls pick move, which initiates the AB pruning with neg and positive infinity values
-        int move = pickMove(state, depth, -Integer.MAX_VALUE, Integer.MAX_VALUE, view).getMove();
+        int move = pickMove(state, depth, -Integer.MAX_VALUE, Integer.MAX_VALUE, view, 0).getMove();
 
         // report that move to the view to update display
         view.reportMove(move, getName());
@@ -284,17 +284,19 @@ public class ComputerConnectFourPlayer extends Player{
      * @param view the graphical view the game is displayed on
      *
      */
-    public ConnectFourMove pickMove(Connect4State state, int depth, int low, int high, Connect4View view){
+    public ConnectFourMove pickMove(Connect4State state, int depth, int low, int high, Connect4View view, int GTSValue){
 
         // holds the move being tested
         ConnectFourMove currentMove;
 
         // best possible move that can be made on game board
         ConnectFourMove bestMove = new ConnectFourMove(-Integer.MAX_VALUE, 0);
+        //the player performing the GTS
+        Player player = this;
+        //The opposing player
 
         // get player who's turn it is to play
         int playerToMove = state.getPlayerNum();
-
             // for each column, test the point value of placing a chip there
             for (int j = 0; j < 6; j++) {
 
@@ -310,20 +312,20 @@ public class ComputerConnectFourPlayer extends Player{
                     // make move and call static evaluation on that move
                     copy.makeMove(j);
                     currentMove = new ConnectFourMove(staticEvaluation(copy,j), j);
-
+                    if (state.getPlayerToMove() != player){
+                      currentMove.setValue(-currentMove.getValue());
+                      }
+                      currentMove.setMove(j);
+                      GTSValue += currentMove.getValue();
+                    
                     // if the value is bigger than the lowest
-                    if (currentMove.getValue() > low){
-
-                        // update low and the best move
-                        low = currentMove.getValue();
-                        bestMove = currentMove;
-                    }
+                    
 
                     // if the game is over
                     if (copy.gameIsOver()){
 
                         // update current move
-                        currentMove = new ConnectFourMove(staticEvaluation(copy,j), j);
+                        currentMove = new ConnectFourMove(100*staticEvaluation(copy,j), j);
                     }
 
                     // if depth is greater than current move
@@ -331,19 +333,19 @@ public class ComputerConnectFourPlayer extends Player{
 
                         // switch players and recursively call pickMove with values switched for opponent player
                         copy.switchPlayer();
-                        currentMove = pickMove(copy, depth - 1, -high, -low, view);
-                        currentMove.setValue(-currentMove.getValue());
-                        currentMove.setMove(j);
+                        currentMove = pickMove(copy, depth - 1, -high, -low, view, GTSValue);
+                        
+                        
 
                     } else {
-                        currentMove = new ConnectFourMove(staticEvaluation(copy, j), j);
+                        currentMove = new ConnectFourMove(GTSValue, j);
                     }
 
                     // if the current move is better than the best stored move, update it
                     if (currentMove.getValue() > bestMove.getValue()){
                         bestMove = currentMove;
 
-                        // update the low based on the higer of the two values: low and bestMove
+                        // update the low based on the higher of the two values: low and bestMove
                         low = Math.max(low, bestMove.getValue());
                     }
                 }
