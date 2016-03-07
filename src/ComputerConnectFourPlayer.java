@@ -317,9 +317,6 @@ public class ComputerConnectFourPlayer extends Player{
                         System.out.println(copy.getBoard()[i]);
                     }
                     System.out.println();
-                    System.out.println("low: " + low);
-                    System.out.println("high: " + high);
-                    System.out.println("Static Evaluation for this position: " + currentMove.getValue());
 
                     if (state.getPlayerToMove() != player){
                       currentMove.setValue(-currentMove.getValue());
